@@ -3,15 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --surface: #f3efe7;
+    --surface-accent: #efe3d1;
+    --panel: rgba(255, 255, 255, 0.88);
+    --panel-strong: #fffdf8;
+    --line: rgba(116, 82, 36, 0.14);
+    --ink: #1f2937;
+    --muted: #6b7280;
+    --accent: #b45309;
+    --accent-strong: #92400e;
+    --accent-soft: rgba(180, 83, 9, 0.14);
+    --success: #166534;
+    --warning: #b45309;
+    --danger: #b91c1c;
+  }
+
   html {
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    color: #121417;
-    background: #f7f7f8;
+    font-family: "Segoe UI", "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 28%),
+      linear-gradient(180deg, #f8f4ec 0%, #f4efe7 48%, #efe9df 100%);
   }
 
   body {
     margin: 0;
     min-height: 100vh;
+    color: var(--ink);
+    background: transparent;
   }
 
   * {
@@ -21,35 +43,105 @@
 
 @layer components {
   .panel {
-    @apply rounded-lg border border-line bg-panel shadow-panel;
+    @apply rounded-2xl border backdrop-blur-sm shadow-panel;
+    border-color: var(--line);
+    background: linear-gradient(180deg, var(--panel-strong) 0%, var(--panel) 100%);
   }
 
   .label {
-    @apply mb-2 block text-sm font-medium text-ink;
+    @apply mb-2 block text-sm font-semibold tracking-[0.01em];
+    color: var(--ink);
   }
 
   .field {
-    @apply h-11 w-full rounded-md border border-line bg-white px-3 text-sm text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-blue-100;
+    @apply h-12 w-full rounded-xl border bg-white/90 px-4 text-sm outline-none transition duration-200;
+    border-color: var(--line);
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .field::placeholder {
+    color: #9ca3af;
+  }
+
+  .field:focus {
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 4px var(--accent-soft),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 
   .textarea {
-    @apply min-h-24 w-full rounded-md border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition focus:border-accent focus:ring-2 focus:ring-blue-100;
+    @apply min-h-28 w-full rounded-xl border bg-white/90 px-4 py-3 text-sm outline-none transition duration-200;
+    border-color: var(--line);
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .textarea::placeholder {
+    color: #9ca3af;
+  }
+
+  .textarea:focus {
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 4px var(--accent-soft),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
   }
 
   .btn {
-    @apply inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   }
 
   .btn-primary {
-    @apply btn bg-ink text-white hover:bg-slate-800;
+    @apply btn text-white;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 28px rgba(146, 64, 14, 0.22);
   }
 
   .btn-secondary {
-    @apply btn border border-line bg-white text-ink hover:bg-slate-50;
+    @apply btn border text-slate-700;
+    border-color: var(--line);
+    background: rgba(255, 255, 255, 0.82);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.96);
   }
 
   .btn-danger {
-    @apply btn bg-danger text-white hover:bg-orange-700;
+    @apply btn bg-red-600 text-white;
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #991b1b;
+  }
+
+  .topbar {
+    background: rgba(255, 251, 245, 0.78);
+    backdrop-filter: blur(16px);
+  }
+
+  .nav-link {
+    @apply flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition;
+    color: var(--muted);
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--ink);
+  }
+
+  .nav-link-active {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    color: white;
   }
 }
 

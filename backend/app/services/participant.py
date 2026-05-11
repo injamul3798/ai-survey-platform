@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.core.exceptions import ConflictError, NotFoundError
+from backend.app.models.participant import Participant
 from backend.app.repositories.participant import ParticipantRepository
 from backend.app.schemas.participant import ParticipantCreate, ParticipantListItem, ParticipantResponse, ParticipantUpdate
 

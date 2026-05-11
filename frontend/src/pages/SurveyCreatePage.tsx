@@ -14,6 +14,11 @@ import { Input } from "../components/ui/Input";
 import { Textarea } from "../components/ui/Textarea";
 import { useAuth } from "../features/auth/AuthProvider";
 
+const MIN_QUESTION_COUNT = 1;
+const MAX_QUESTION_COUNT = 20;
+const MIN_OPTION_COUNT = 2;
+const MAX_OPTION_COUNT = 6;
+
 const surveyOptionSchema = z.object({
   option_text: z.string().min(1, "Option is required"),
   is_correct: z.boolean(),
@@ -38,10 +43,10 @@ const surveyQuestionSchema = z
 const schema = z
   .object({
     topic: z.string().min(1, "Topic is required"),
-    question_count: z.coerce.number().min(1).max(3),
-    option_count: z.coerce.number().min(2).max(6),
+    question_count: z.coerce.number().min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
+    option_count: z.coerce.number().min(MIN_OPTION_COUNT).max(MAX_OPTION_COUNT),
     title: z.string().min(1, "Survey title is required"),
-    questions: z.array(surveyQuestionSchema).min(1).max(3),
+    questions: z.array(surveyQuestionSchema).min(MIN_QUESTION_COUNT).max(MAX_QUESTION_COUNT),
   })
   .superRefine((value, ctx) => {
     if (value.questions.length !== value.question_count) {
@@ -216,12 +221,22 @@ export function SurveyCreatePage() {
           </div>
           <div>
             <label className="label">Questions</label>
-            <Input type="number" min={1} max={3} {...register("question_count")} />
+            <Input
+              type="number"
+              min={MIN_QUESTION_COUNT}
+              max={MAX_QUESTION_COUNT}
+              {...register("question_count")}
+            />
             <FormError message={errors.question_count?.message} />
           </div>
           <div>
             <label className="label">Options Per Question</label>
-            <Input type="number" min={2} max={6} {...register("option_count")} />
+            <Input
+              type="number"
+              min={MIN_OPTION_COUNT}
+              max={MAX_OPTION_COUNT}
+              {...register("option_count")}
+            />
             <FormError message={errors.option_count?.message} />
           </div>
           <div className="flex items-end">

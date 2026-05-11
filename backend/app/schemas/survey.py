@@ -5,16 +5,21 @@ from pydantic import BaseModel, Field, model_validator
 
 from backend.app.schemas.common import TimestampedResponse
 
+MIN_QUESTION_COUNT = 1
+MAX_QUESTION_COUNT = 20
+MIN_OPTION_COUNT = 2
+MAX_OPTION_COUNT = 6
+
 
 class SurveyGenerateRequest(BaseModel):
     topic: str = Field(min_length=1)
-    question_count: int = Field(default=3, ge=1, le=3)
-    option_count: int = Field(default=4, ge=2, le=6)
+    question_count: int = Field(default=3, ge=MIN_QUESTION_COUNT, le=MAX_QUESTION_COUNT)
+    option_count: int = Field(default=4, ge=MIN_OPTION_COUNT, le=MAX_OPTION_COUNT)
 
 
 class GeneratedQuestion(BaseModel):
     question: str = Field(min_length=1)
-    options: list[str] = Field(min_length=2, max_length=6)
+    options: list[str] = Field(min_length=MIN_OPTION_COUNT, max_length=MAX_OPTION_COUNT)
     correct_answer_index: int = Field(ge=0)
 
     @model_validator(mode="after")
@@ -30,16 +35,16 @@ class GeneratedQuestion(BaseModel):
 
 class GeneratedSurveyDraft(BaseModel):
     title: str = Field(min_length=1)
-    questions: list[GeneratedQuestion] = Field(min_length=1, max_length=3)
+    questions: list[GeneratedQuestion] = Field(min_length=MIN_QUESTION_COUNT, max_length=MAX_QUESTION_COUNT)
 
 
 class QuestionRegenerateRequest(BaseModel):
     topic: str = Field(min_length=1)
     title: str = Field(min_length=1)
-    question_count: int = Field(ge=1, le=3)
-    option_count: int = Field(ge=2, le=6)
-    target_index: int = Field(ge=0, le=2)
-    questions: list[GeneratedQuestion] = Field(min_length=1, max_length=3)
+    question_count: int = Field(ge=MIN_QUESTION_COUNT, le=MAX_QUESTION_COUNT)
+    option_count: int = Field(ge=MIN_OPTION_COUNT, le=MAX_OPTION_COUNT)
+    target_index: int = Field(ge=0)
+    questions: list[GeneratedQuestion] = Field(min_length=MIN_QUESTION_COUNT, max_length=MAX_QUESTION_COUNT)
 
     @model_validator(mode="after")
     def validate_target_index(self):
@@ -57,7 +62,7 @@ class SurveyOptionInput(BaseModel):
 
 class SurveyQuestionInput(BaseModel):
     question_text: str = Field(min_length=1)
-    options: list[SurveyOptionInput] = Field(min_length=2, max_length=6)
+    options: list[SurveyOptionInput] = Field(min_length=MIN_OPTION_COUNT, max_length=MAX_OPTION_COUNT)
 
     @model_validator(mode="after")
     def validate_single_correct_answer(self):
@@ -70,10 +75,10 @@ class SurveyQuestionInput(BaseModel):
 class SurveyCreateRequest(BaseModel):
     title: str = Field(min_length=1)
     topic: str = Field(min_length=1)
-    question_count: int = Field(ge=1, le=3)
-    option_count: int = Field(ge=2, le=6)
+    question_count: int = Field(ge=MIN_QUESTION_COUNT, le=MAX_QUESTION_COUNT)
+    option_count: int = Field(ge=MIN_OPTION_COUNT, le=MAX_OPTION_COUNT)
     ai_response: GeneratedSurveyDraft
-    questions: list[SurveyQuestionInput] = Field(min_length=1, max_length=3)
+    questions: list[SurveyQuestionInput] = Field(min_length=MIN_QUESTION_COUNT, max_length=MAX_QUESTION_COUNT)
 
     @model_validator(mode="after")
     def validate_counts(self):

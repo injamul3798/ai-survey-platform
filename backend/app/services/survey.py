@@ -110,16 +110,18 @@ class SurveyService:
     async def _build_response(self, survey: Survey) -> SurveyResponse:
         active_participant_count = await self.survey_repository.count_active_participants()
         sent_count = await self.survey_repository.count_sent_invitations(survey.id)
-        await self.session.refresh(survey)
+        hydrated_survey = await self.survey_repository.get_by_id(str(survey.id))
+        if hydrated_survey is None:
+            raise NotFoundError("Survey not found")
         return SurveyResponse(
-            id=survey.id,
-            title=survey.title,
-            topic=survey.topic,
-            question_count=survey.question_count,
-            option_count=survey.option_count,
-            ai_response=survey.ai_response,
-            created_at=survey.created_at,
-            updated_at=survey.updated_at,
+            id=hydrated_survey.id,
+            title=hydrated_survey.title,
+            topic=hydrated_survey.topic,
+            question_count=hydrated_survey.question_count,
+            option_count=hydrated_survey.option_count,
+            ai_response=hydrated_survey.ai_response,
+            created_at=hydrated_survey.created_at,
+            updated_at=hydrated_survey.updated_at,
             active_participant_count=active_participant_count,
             sent_invitation_count=sent_count,
             questions=[
@@ -143,6 +145,6 @@ class SurveyService:
                         for option in sorted(question.options, key=lambda item: item.option_order)
                     ],
                 }
-                for question in sorted(survey.questions, key=lambda item: item.question_order)
+                for question in sorted(hydrated_survey.questions, key=lambda item: item.question_order)
             ],
         )
