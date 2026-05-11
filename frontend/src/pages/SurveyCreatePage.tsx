@@ -177,9 +177,13 @@ export function SurveyCreatePage() {
           questions: values.questions,
         }),
       }),
-    onSuccess: async () => {
+    onSuccess: async (survey) => {
       await queryClient.invalidateQueries({ queryKey: ["surveys"] });
-      navigate("/surveys");
+      navigate("/surveys", {
+        state: {
+          successMessage: `Survey "${survey.title}" was created successfully and is now ready for invitation delivery.`,
+        },
+      });
     },
   });
 
@@ -208,15 +212,25 @@ export function SurveyCreatePage() {
   return (
     <section className="space-y-6">
       <div>
+        <p className="eyebrow">AI Authoring</p>
         <h1 className="text-2xl font-semibold">Create Survey</h1>
-        <p className="mt-1 text-sm text-muted">Generate a survey draft with AI, review it, and save the final version.</p>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
+          Define the survey topic, control the draft size, then refine the AI-generated questions before saving the final survey.
+        </p>
       </div>
 
       <div className="panel p-6">
+        <div className="mb-6 flex items-start justify-between gap-4 border-b border-line pb-5">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Generation Settings</h2>
+            <p className="mt-1 text-sm text-muted">Use a clear topic and sensible counts to produce cleaner first-pass drafts.</p>
+          </div>
+          <span className="chip">1-20 questions</span>
+        </div>
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_140px_140px_auto]">
           <div>
             <label className="label">Topic</label>
-            <Textarea {...register("topic")} />
+            <Textarea placeholder="Example: Customer satisfaction with ITM online support services" {...register("topic")} />
             <FormError message={errors.topic?.message} />
           </div>
           <div>
@@ -246,7 +260,7 @@ export function SurveyCreatePage() {
           </div>
         </div>
         {generateMutation.error && (
-          <div className="mt-4 text-sm text-danger">
+          <div className="notice-error mt-4">
             {generateMutation.error instanceof Error ? generateMutation.error.message : "Failed to generate survey"}
           </div>
         )}
@@ -254,6 +268,10 @@ export function SurveyCreatePage() {
 
       <form className="space-y-6" onSubmit={handleSubmit((values) => createSurveyMutation.mutate(values))}>
         <div className="panel p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-ink">Survey Title</h2>
+            <p className="mt-1 text-sm text-muted">Keep the title concise and recognizable for both admins and participants.</p>
+          </div>
           <label className="label">Survey Title</label>
           <Input {...register("title")} />
           <FormError message={errors.title?.message} />
@@ -265,7 +283,7 @@ export function SurveyCreatePage() {
               <div className="mb-5 flex items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-semibold">Question {questionIndex + 1}</h2>
-                  <p className="mt-1 text-sm text-muted">Choose one correct option before saving.</p>
+                  <p className="mt-1 text-sm text-muted">Review the wording carefully and mark exactly one correct option.</p>
                 </div>
                 <Button
                   type="button"
@@ -316,7 +334,7 @@ export function SurveyCreatePage() {
         </div>
 
         {createSurveyMutation.error && (
-          <div className="text-sm text-danger">
+          <div className="notice-error">
             {createSurveyMutation.error instanceof Error ? createSurveyMutation.error.message : "Failed to save survey"}
           </div>
         )}

@@ -48,6 +48,12 @@ class SurveyService:
             )
         return results
 
+    async def get_survey(self, survey_id: str) -> SurveyResponse:
+        survey = await self.survey_repository.get_by_id(survey_id)
+        if survey is None:
+            raise NotFoundError("Survey not found")
+        return await self._build_response(survey)
+
     async def generate_survey(self, payload: SurveyGenerateRequest) -> GeneratedSurveyDraft:
         return await self.ai_service.generate(payload)
 

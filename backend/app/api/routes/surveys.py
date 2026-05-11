@@ -23,6 +23,15 @@ async def list_surveys(
     return await SurveyService(session).list_surveys()
 
 
+@router.get("/{survey_id}", response_model=SurveyResponse)
+async def get_survey(
+    survey_id: str,
+    session: AsyncSession = Depends(get_db_session),
+    _user=Depends(get_current_user),
+) -> SurveyResponse:
+    return await SurveyService(session).get_survey(survey_id)
+
+
 @router.post("/generate", response_model=GeneratedSurveyDraft)
 async def generate_survey(
     payload: SurveyGenerateRequest,

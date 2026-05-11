@@ -1,30 +1,133 @@
 # AI Survey Platform
 
-Greenfield implementation of an AI-powered survey platform with:
+AI Survey Platform is an admin-only survey management system for creating participants, generating surveys with AI, sending invitation emails, and collecting survey submissions through public survey links.
 
-- FastAPI backend
-- React frontend
-- PostgreSQL via Docker
-- Async SQLAlchemy and Alembic
-- OpenAI Responses API for survey generation
-- Gmail SMTP invitations
+## Functionality
 
-## Project Layout
+- Admin login with JWT authentication
+- Participant management with active/inactive status
+- AI-powered survey generation using the OpenAI Responses API
+- Manual survey review and editing before saving
+- Survey list and survey detail view
+- Invitation sending to active participants only
+- Public survey submission through emailed invitation links
+- PostgreSQL-backed storage with Alembic migrations
 
-- `backend/` FastAPI app, migrations, tests, requirements
-- `frontend/` React SPA with protected admin routes and public survey submission
-- `create_admin.py` admin bootstrap entrypoint
-- `docker-compose.yml` PostgreSQL container
+## Tech Stack
 
-## Setup Outline
+- Backend: FastAPI
+- Frontend: React + Vite + TypeScript
+- Database: PostgreSQL
+- ORM: SQLAlchemy Async
+- Migrations: Alembic
+- Authentication: JWT
+- AI Integration: OpenAI Responses API
+- Email: Gmail SMTP
+- Container: Docker Compose
 
-1. Copy `.env.example` to `.env` and fill in real secrets.
-2. Create a Python virtual environment and install `backend/requirements.txt`.
-3. Install frontend dependencies inside `frontend/`.
-4. Start PostgreSQL with Docker Compose.
-5. Run Alembic migrations.
-6. Run `python create_admin.py`.
-7. Start backend and frontend dev servers.
+## How To Run
 
-See the final response from Codex for the exact commands.
+### 1. Go to the project
 
+```powershell
+cd F:\servery\servery
+```
+
+### 2. Activate Python environment
+
+If you are using your existing environment:
+
+```powershell
+& F:\ai-interviewer\venv\Scripts\Activate.ps1
+```
+
+Or activate this project's local environment if you created one:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 3. Install backend dependencies
+
+```powershell
+python -m pip install -r backend\requirements.txt
+```
+
+### 4. Create environment files
+
+```powershell
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
+if (!(Test-Path frontend\.env)) { Copy-Item frontend\.env.example frontend\.env }
+```
+
+### 5. Fill required values in `.env`
+
+Required values include:
+
+```env
+DATABASE_URL=
+ALEMBIC_DATABASE_URL=
+JWT_SECRET_KEY=
+OPENAI_API_KEY=
+SMTP_EMAIL=injamulhaque9117@gmail.com
+SMTP_PASSWORD=
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+FRONTEND_BASE_URL=http://localhost:5173
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+```
+
+### 6. Start PostgreSQL
+
+```powershell
+docker compose up -d
+```
+
+### 7. Run database migration
+
+```powershell
+alembic -c backend\alembic.ini upgrade head
+```
+
+### 8. Create the admin user
+
+```powershell
+python create_admin.py
+```
+
+### 9. Start the backend
+
+```powershell
+uvicorn backend.app.main:app --reload
+```
+
+Backend URLs:
+
+- API: `http://127.0.0.1:8000`
+- Docs: `http://127.0.0.1:8000/docs`
+
+### 10. Start the frontend
+
+Open a new terminal:
+
+```powershell
+cd F:\servery\servery\frontend
+npm install
+npm run dev
+```
+
+Frontend URL:
+
+- `http://localhost:5173`
+
+### 11. Use the system
+
+- Login with `ADMIN_EMAIL` and `ADMIN_PASSWORD`
+- Create participants
+- Generate and save surveys
+- Send invitations
+- Open the survey link from email
+- Submit survey responses
+
+Created by Injamul Haque

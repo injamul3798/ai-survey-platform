@@ -42,35 +42,47 @@ export function ParticipantCreatePage() {
         token,
         body: JSON.stringify(payload),
       }),
-    onSuccess: async () => {
+    onSuccess: async (participant) => {
       await queryClient.invalidateQueries({ queryKey: ["participants"] });
       reset();
-      navigate("/participants");
+      navigate("/participants", {
+        state: {
+          successMessage: `${participant.full_name} was added successfully and is ready for future survey invitations.`,
+        },
+      });
     },
   });
 
   return (
     <section className="max-w-3xl space-y-6">
       <div>
+        <p className="eyebrow">Directory Management</p>
         <h1 className="text-2xl font-semibold">New Participant</h1>
-        <p className="mt-1 text-sm text-muted">Create a participant record with unique email validation.</p>
+        <p className="mt-2 text-sm leading-6 text-muted">Create a participant record with clean contact details and explicit invitation eligibility.</p>
       </div>
 
       <form className="panel p-6" onSubmit={handleSubmit((values) => mutation.mutate(values))}>
+        <div className="mb-6 flex items-start justify-between gap-4 border-b border-line pb-5">
+          <div>
+            <h2 className="text-base font-semibold text-ink">Participant Details</h2>
+            <p className="mt-1 text-sm text-muted">Required fields help keep delivery lists valid and ready for survey sends.</p>
+          </div>
+          <span className="chip">Admin only</span>
+        </div>
         <div className="grid gap-5 md:grid-cols-2">
           <div>
             <label className="label">Full Name</label>
-            <Input {...register("full_name")} />
+            <Input placeholder="Md. Injamul Haque" {...register("full_name")} />
             <FormError message={errors.full_name?.message} />
           </div>
           <div>
             <label className="label">Email</label>
-            <Input type="email" {...register("email")} />
+            <Input type="email" placeholder="name@example.com" {...register("email")} />
             <FormError message={errors.email?.message} />
           </div>
           <div>
             <label className="label">Mobile</label>
-            <Input {...register("mobile")} />
+            <Input placeholder="01700000000" {...register("mobile")} />
             <FormError message={errors.mobile?.message} />
           </div>
           <div className="flex items-end">
@@ -81,7 +93,7 @@ export function ParticipantCreatePage() {
           </div>
         </div>
         {mutation.error && (
-          <div className="mt-4 text-sm text-danger">
+          <div className="notice-error mt-4">
             {mutation.error instanceof Error ? mutation.error.message : "Failed to save participant"}
           </div>
         )}

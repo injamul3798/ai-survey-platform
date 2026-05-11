@@ -5,28 +5,28 @@
 @layer base {
   :root {
     color-scheme: light;
-    --surface: #f3efe7;
-    --surface-accent: #efe3d1;
+    --surface: #f4f7fb;
+    --surface-accent: #eef4ff;
     --panel: rgba(255, 255, 255, 0.88);
-    --panel-strong: #fffdf8;
-    --line: rgba(116, 82, 36, 0.14);
-    --ink: #1f2937;
-    --muted: #6b7280;
-    --accent: #b45309;
-    --accent-strong: #92400e;
-    --accent-soft: rgba(180, 83, 9, 0.14);
-    --success: #166534;
+    --panel-strong: rgba(255, 255, 255, 0.98);
+    --line: rgba(15, 23, 42, 0.08);
+    --ink: #172033;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --accent-strong: #1d4ed8;
+    --accent-soft: rgba(37, 99, 235, 0.14);
+    --success: #15803d;
     --warning: #b45309;
     --danger: #b91c1c;
   }
 
   html {
-    font-family: "Segoe UI", "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+    font-family: "Segoe UI", "Aptos", ui-sans-serif, system-ui, sans-serif;
     color: var(--ink);
     background:
-      radial-gradient(circle at top left, rgba(251, 191, 36, 0.18), transparent 30%),
-      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 28%),
-      linear-gradient(180deg, #f8f4ec 0%, #f4efe7 48%, #efe9df 100%);
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.14), transparent 28%),
+      radial-gradient(circle at top right, rgba(34, 197, 94, 0.08), transparent 22%),
+      linear-gradient(180deg, #f8fbff 0%, #f4f7fb 48%, #eef3f9 100%);
   }
 
   body {
@@ -46,6 +46,12 @@
     @apply rounded-2xl border backdrop-blur-sm shadow-panel;
     border-color: var(--line);
     background: linear-gradient(180deg, var(--panel-strong) 0%, var(--panel) 100%);
+  }
+
+  .panel-muted {
+    @apply rounded-2xl border;
+    border-color: rgba(37, 99, 235, 0.08);
+    background: linear-gradient(180deg, rgba(248, 251, 255, 0.96) 0%, rgba(241, 246, 255, 0.86) 100%);
   }
 
   .label {
@@ -90,42 +96,87 @@
   }
 
   .btn {
-    @apply inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    @apply relative inline-flex min-h-11 items-center justify-center overflow-hidden rounded-xl border px-4 py-2 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+    border-color: transparent;
+  }
+
+  .btn > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 0.7rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .btn:hover:not(:disabled)::before {
+    opacity: 1;
   }
 
   .btn-primary {
-    @apply btn text-white;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+    @apply btn gap-2 text-white;
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    box-shadow:
+      0 12px 30px rgba(37, 99, 235, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .btn-primary::before {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.02) 100%);
   }
 
   .btn-primary:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 28px rgba(146, 64, 14, 0.22);
+    box-shadow:
+      0 18px 36px rgba(37, 99, 235, 0.26),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
   }
 
   .btn-secondary {
-    @apply btn border text-slate-700;
+    @apply btn gap-2 border text-slate-700;
     border-color: var(--line);
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+      0 8px 24px rgba(15, 23, 42, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  .btn-secondary::before {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   }
 
   .btn-secondary:hover:not(:disabled) {
-    transform: translateY(-1px);
     background: rgba(255, 255, 255, 0.96);
   }
 
   .btn-danger {
-    @apply btn bg-red-600 text-white;
+    @apply btn gap-2 text-white;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow:
+      0 12px 28px rgba(220, 38, 38, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
+
+  .btn-danger::before {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.02) 100%);
   }
 
   .btn-danger:hover:not(:disabled) {
-    transform: translateY(-1px);
-    background: #991b1b;
+    box-shadow:
+      0 16px 30px rgba(185, 28, 28, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22);
   }
 
   .topbar {
-    background: rgba(255, 251, 245, 0.78);
+    background: rgba(255, 255, 255, 0.74);
     backdrop-filter: blur(16px);
   }
 
@@ -135,13 +186,68 @@
   }
 
   .nav-link:hover {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(37, 99, 235, 0.08);
     color: var(--ink);
   }
 
   .nav-link-active {
-    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-    color: white;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(29, 78, 216, 0.18) 100%);
+    color: var(--accent-strong);
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.22em];
+    color: #5b6b84;
+  }
+
+  .stat-card {
+    @apply panel p-5;
+  }
+
+  .stat-value {
+    @apply mt-3 text-3xl font-semibold tracking-tight;
+    color: var(--ink);
+  }
+
+  .stat-label {
+    @apply mt-1 text-sm;
+    color: var(--muted);
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--accent-strong);
+  }
+
+  .chip-success {
+    @apply chip;
+    background: rgba(22, 163, 74, 0.12);
+    color: #166534;
+  }
+
+  .chip-muted {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium;
+    background: rgba(148, 163, 184, 0.14);
+    color: #475569;
+  }
+
+  .notice {
+    @apply rounded-2xl border px-4 py-4 text-sm;
+  }
+
+  .notice-success {
+    @apply notice;
+    border-color: rgba(22, 163, 74, 0.18);
+    background: linear-gradient(180deg, rgba(240, 253, 244, 0.96) 0%, rgba(236, 253, 245, 0.88) 100%);
+    color: #166534;
+  }
+
+  .notice-error {
+    @apply notice;
+    border-color: rgba(220, 38, 38, 0.16);
+    background: linear-gradient(180deg, rgba(254, 242, 242, 0.96) 0%, rgba(254, 226, 226, 0.84) 100%);
+    color: #991b1b;
   }
 }
 

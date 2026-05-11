@@ -6,6 +6,7 @@ import { LoginPage } from "../pages/LoginPage";
 import { ParticipantsPage } from "../pages/ParticipantsPage";
 import { ParticipantCreatePage } from "../pages/ParticipantCreatePage";
 import { SurveyCreatePage } from "../pages/SurveyCreatePage";
+import { SurveyDetailPage } from "../pages/SurveyDetailPage";
 import { SurveysPage } from "../pages/SurveysPage";
 import { SurveySubmissionPage } from "../pages/SurveySubmissionPage";
 
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
           { path: "/participants/new", element: <ParticipantCreatePage /> },
           { path: "/surveys", element: <SurveysPage /> },
           { path: "/surveys/new", element: <SurveyCreatePage /> },
+          { path: "/surveys/:surveyId", element: <SurveyDetailPage /> },
         ],
       },
     ],
