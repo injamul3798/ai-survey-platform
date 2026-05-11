@@ -1,0 +1,6 @@
+import secrets
+
+
+def generate_email_token() -> str:
+    return secrets.token_urlsafe(32)
+
