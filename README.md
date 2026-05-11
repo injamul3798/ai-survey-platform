@@ -1,7 +1,7 @@
 # AI Survey Platform
 
 AI Survey Platform is an admin-only survey management system for creating participants, generating surveys with AI, sending invitation emails, and collecting survey submissions through public survey links.
-
+[b508ef48-0332-4d5d-b932-8498c4bfa461.webm](https://github.com/user-attachments/assets/4c7cc354-80ab-4d97-866f-493899f6bb8c)
 ## Functionality
 
 - Admin login with JWT authentication
